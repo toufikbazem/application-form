@@ -146,12 +146,15 @@ const ReLicense = ({
           >
             {loading ? (
               <>
-                <Spinner /> Loading
+                Loading
+                <Spinner className="ml-2" />
               </>
             ) : (
-              <>Submit</>
+              <>
+                Submit
+                <Send size={15} className="ml-2" />
+              </>
             )}
-            <Send size={15} className="ml-2" />
           </button>
         ) : (
           <button

@@ -175,18 +175,22 @@ const NewLicense = ({
 
         {current === 4 ? (
           <button
+            disabled={loading}
             type="button"
             onClick={form.handleSubmit(onSubmit)}
             className="bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium flex items-center px-4 py-2.5 rounded-md cursor-pointer"
           >
             {loading ? (
               <>
-                <Spinner /> Loading
+                Loading
+                <Spinner className="ml-2" />
               </>
             ) : (
-              <>Submit</>
+              <>
+                Submit
+                <Send size={15} className="ml-2" />
+              </>
             )}
-            <Send size={15} className="ml-2" />
           </button>
         ) : (
           <button

@@ -12,6 +12,8 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://application-form-1-y61q.onrender.com",
+      "https://form.wijha-dz.com",
+      "http://form.wijha-dz.com",
     ],
     credentials: true,
   }),
