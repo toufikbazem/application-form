@@ -12,12 +12,9 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://application-form-1-y61q.onrender.com",
-<<<<<<< HEAD
       "https://form.wijha-dz.com",
       "http://form.wijha-dz.com",
-=======
-      "https://application-form-iota-ashen.vercel.app"
->>>>>>> 3f2634a4c7b7de79a79438f4011398fe9ab53d85
+      "https://application-form-iota-ashen.vercel.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     credentials: true,
