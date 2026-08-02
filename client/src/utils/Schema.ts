@@ -31,11 +31,11 @@ const ALGERIA_COUNTRY = "Algeria - الجزائر";
 // Medical condition value that prompts a free-text description.
 const OTHER_MEDICAL_CONDITION = "Other - أخر";
 // Major ids that require choosing a language of study (license).
-const LANGUAGE_REQUIRED_MAJORS = ["cs", "scs", "ste"];
+const LANGUAGE_REQUIRED_MAJORS = ["cs", "scs", "ste", "ebm", "cse"];
 // Major ids that require choosing a language of study (new master).
-const NEW_MAS_LANGUAGE_REQUIRED_MAJORS = ["csd", "csc", "esb"];
+const NEW_MAS_LANGUAGE_REQUIRED_MAJORS = ["csd", "csc", "mba"];
 // Major ids that require choosing a language of study (re master).
-const RE_MAS_LANGUAGE_REQUIRED_MAJORS = ["cs", "scs", "ebm"];
+const RE_MAS_LANGUAGE_REQUIRED_MAJORS = ["csd", "csc", "mba"];
 
 export const PersonalInfoSchema = z
   .object({
