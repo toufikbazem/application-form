@@ -11,6 +11,7 @@ import {
 import { Trophy } from "lucide-react";
 import RankPanel from "@/components/RankPanel";
 import { masterMajors } from "@/data/data";
+import { Input } from "@/components/ui/input";
 
 const MAX_CHOICES = 1;
 const LANGUAGE_MAJORS = ["csd", "csc", "mba"];
@@ -44,6 +45,33 @@ const ReMasMajor = ({ form }: { form: any }) => {
         </p>
       </div>
       <div className="flex flex-col gap-4">
+        {/* Student ID — re-registering students already have one. */}
+        <Controller
+          name="studentId"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field
+              className=" flex flex-col gap-1.5"
+              data-invalid={fieldState.invalid}
+            >
+              <FieldLabel className="text-xs font-medium text-slate-500 gap-0">
+                Student ID
+                <span className="text-red-500 ml-0.5">*</span>
+              </FieldLabel>
+
+              <Input
+                type="text"
+                className="input"
+                {...field}
+                aria-invalid={fieldState.invalid}
+                placeholder="Enter your student ID"
+              />
+
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {masterMajors.map((m) => (
             <MajorCard

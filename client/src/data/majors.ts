@@ -61,6 +61,15 @@ export const licenseMajors: Major[] = [
     total: "400 000 DA",
     firstInstallment: "200 000 DA",
   },
+  // Re-registration only, but kept here so `majorNameFor` can resolve it on
+  // the review step (which shares one list per degree).
+  {
+    id: "fsa",
+    name: "Financial Sciences and Accounting - Accounting",
+    language: "French/Arabic",
+    total: "485 000 DA",
+    firstInstallment: "242 500 DA",
+  },
 ];
 
 // export const masterMajors: Major[] = [

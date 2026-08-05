@@ -10,12 +10,23 @@ import { z } from "zod";
 const ALGERIAN_NATIONALITY = "Algerian - جزائري";
 const ALGERIA_COUNTRY = "Algeria - الجزائر";
 const LANGUAGE_REQUIRED_MAJORS = ["cs", "scs", "ste", "ebm", "cse"];
+// "fsa" is only offered to re-registering license students.
+const RE_LIC_LANGUAGE_REQUIRED_MAJORS = [...LANGUAGE_REQUIRED_MAJORS, "fsa"];
 const NEW_MAS_LANGUAGE_REQUIRED_MAJORS = ["csd", "csc", "esb"];
 const RE_MAS_LANGUAGE_REQUIRED_MAJORS = ["cs", "scs", "ebm"];
 // High school name is only required for public/private schools.
 const HIGH_SCHOOL_NAME_REQUIRED_TYPES = ["public - حكومية", "private - خاصة"];
 
 const phoneRegex = /^(\+213|0)(5|6|7)[0-9]{8}$/;
+
+// Re-registering students already hold a university-issued student ID. Only the
+// re-registration variants collect it, so it lives on their major schemas.
+const studentIdField = z
+  .string()
+  .trim()
+  .min(4, "Student ID is required.")
+  .max(20, "Student ID must be at most 20 characters.")
+  .regex(/^[A-Za-z0-9-]+$/, "Enter a valid student ID.");
 
 const optionalEmail = z
   .string()
@@ -182,18 +193,22 @@ const NewMasMajorSchema = z
   .superRefine(makeLanguageRefine(NEW_MAS_LANGUAGE_REQUIRED_MAJORS));
 
 // Re-registration (license): exactly one major; language required for some.
+// The student ID is collected on this step too.
 const ReLicMajorSchema = z
   .object({
     majors: z.array(z.string()).length(1, "Please select one major."),
     language: z.string().optional(),
+    studentId: studentIdField,
   })
-  .superRefine(languageRefine);
+  .superRefine(makeLanguageRefine(RE_LIC_LANGUAGE_REQUIRED_MAJORS));
 
 // Re-registration (master): exactly one major; language required for some.
+// The student ID is collected on this step too.
 const ReMasMajorSchema = z
   .object({
     majors: z.array(z.string()).length(1, "Please select one major."),
     language: z.string().optional(),
+    studentId: studentIdField,
   })
   .superRefine(makeLanguageRefine(RE_MAS_LANGUAGE_REQUIRED_MAJORS));
 

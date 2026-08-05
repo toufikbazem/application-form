@@ -101,6 +101,9 @@ export const newRegistration = async (req, res) => {
     // Choosing Majors
     majors,
     language,
+
+    // Re-registration only
+    studentId,
   } = req.body;
 
   let pdfUrl;
@@ -181,6 +184,7 @@ export const newRegistration = async (req, res) => {
               majorName(majors[1]),
               language,
               pdfUrl,
+              null, // studentId: re-registration only
             ],
           ],
         },
@@ -261,6 +265,7 @@ export const newRegistration = async (req, res) => {
               null,
               language,
               pdfUrl,
+              studentId,
             ],
           ],
         },
@@ -340,6 +345,7 @@ export const newRegistration = async (req, res) => {
               majorName(majors[1]),
               language,
               pdfUrl,
+              null, // studentId: re-registration only
             ],
           ],
         },
@@ -419,6 +425,7 @@ export const newRegistration = async (req, res) => {
               null,
               language,
               pdfUrl,
+              studentId,
             ],
           ],
         },

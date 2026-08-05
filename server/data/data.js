@@ -49,6 +49,13 @@ export const externMajors = [
     firstInstallment: "200 000 DA",
   },
   {
+    id: "fsa",
+    name: "Financial Sciences and Accounting - Accounting",
+    language: "French/Arabic",
+    total: "585 000 DA",
+    firstInstallment: "292 500 DA",
+  },
+  {
     id: "csd",
     name: "Computer Science - Data Engineering and Web Technology",
     language: "French",

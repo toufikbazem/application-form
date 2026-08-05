@@ -30,12 +30,24 @@ const ALGERIAN_NATIONALITY = "Algerian - جزائري";
 const ALGERIA_COUNTRY = "Algeria - الجزائر";
 // Medical condition value that prompts a free-text description.
 const OTHER_MEDICAL_CONDITION = "Other - أخر";
-// Major ids that require choosing a language of study (license).
+// Major ids that require choosing a language of study (new license).
 const LANGUAGE_REQUIRED_MAJORS = ["cs", "scs", "ste", "ebm", "cse"];
+// Major ids that require choosing a language of study (re license). Includes
+// "fsa", which is only offered to re-registering students.
+const RE_LIC_LANGUAGE_REQUIRED_MAJORS = [...LANGUAGE_REQUIRED_MAJORS, "fsa"];
 // Major ids that require choosing a language of study (new master).
 const NEW_MAS_LANGUAGE_REQUIRED_MAJORS = ["csd", "csc", "mba"];
 // Major ids that require choosing a language of study (re master).
 const RE_MAS_LANGUAGE_REQUIRED_MAJORS = ["csd", "csc", "mba"];
+
+// Re-registering students already hold a university-issued student ID. Only the
+// re-registration paths collect it, so it lives on their major schemas.
+const studentIdField = z
+  .string()
+  .trim()
+  .min(4, "Student ID is required.")
+  .max(20, "Student ID must be at most 20 characters.")
+  .regex(/^[A-Za-z0-9-]+$/, "Enter a valid student ID.");
 
 export const PersonalInfoSchema = z
   .object({
@@ -247,6 +259,7 @@ export const NewMasMajorSchema = z
   .superRefine(makeLanguageRefine(NEW_MAS_LANGUAGE_REQUIRED_MAJORS));
 
 // Re-registration (license): exactly one major; language required for some.
+// The student ID is collected on this step too.
 export const ReLicMajorSchema = z
   .object({
     majors: z
@@ -254,10 +267,12 @@ export const ReLicMajorSchema = z
       .length(1, "Please select one major.")
       .default([]),
     language: z.string().optional(),
+    studentId: studentIdField,
   })
-  .superRefine(languageRefine);
+  .superRefine(makeLanguageRefine(RE_LIC_LANGUAGE_REQUIRED_MAJORS));
 
 // Re-registration (master): exactly one major; language required for some.
+// The student ID is collected on this step too.
 export const ReMasMajorSchema = z
   .object({
     majors: z
@@ -265,6 +280,7 @@ export const ReMasMajorSchema = z
       .length(1, "Please select one major.")
       .default([]),
     language: z.string().optional(),
+    studentId: studentIdField,
   })
   .superRefine(makeLanguageRefine(RE_MAS_LANGUAGE_REQUIRED_MAJORS));
 
@@ -381,6 +397,10 @@ const masAcademicFields = [
 const masMajorFields = ["majors", "language"];
 const licMajorFields = ["majors", "language"];
 
+// The re-registration paths collect the student ID on their major step.
+const reMasMajorFields = [...masMajorFields, "studentId"];
+const reLicMajorFields = [...licMajorFields, "studentId"];
+
 const licParentsFields = [
   "fatherFirstName",
   "fatherPhoneNumber",
@@ -420,6 +440,6 @@ export const fieldsByStep: Record<string, string[][]> = {
     licParentsFields,
     [], // review
   ],
-  reLicense: [personalFields, licMajorFields, []],
-  reMaster: [personalFields, masMajorFields, []],
+  reLicense: [personalFields, reLicMajorFields, []],
+  reMaster: [personalFields, reMasMajorFields, []],
 };

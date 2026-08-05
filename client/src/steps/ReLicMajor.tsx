@@ -10,60 +10,10 @@ import {
 } from "@/components/ui/select";
 import { Trophy } from "lucide-react";
 import RankPanel from "@/components/RankPanel";
+import { Input } from "@/components/ui/input";
 
-const MAJORS = [
-  {
-    id: "cs",
-    name: "Computer Science - Computer Systems",
-    language: "English/French",
-    total: "550 000 DA",
-    firstInstallment: "275 000 DA",
-  },
-  {
-    id: "scs",
-    name: "Computer Science - Security of Computer Systems",
-    language: "English/French",
-    total: "550 000 DA",
-    firstInstallment: "275 000 DA",
-  },
-  {
-    id: "ste",
-    name: "Science & Technology - Electronics",
-    language: "English/French",
-    total: "550 000 DA",
-    firstInstallment: "275 000 DA",
-  },
-  {
-    id: "ebm",
-    name: "Economics - Eco & Business Management",
-    language: "English/French/Arabic",
-    total: "485 000 DA",
-    firstInstallment: "242 500 DA",
-  },
-  {
-    id: "cse",
-    name: "Commercial Sciences - E-commerce",
-    language: "English/French/Arabic",
-    total: "485 000 DA",
-    firstInstallment: "242 500 DA",
-  },
-  {
-    id: "cp",
-    name: "Social Sciences - Clinical Psychology",
-    language: "Arabic",
-    total: "410 000 DA",
-    firstInstallment: "205 000 DA",
-  },
-  {
-    id: "lpl",
-    name: "Law - Public Law",
-    language: "Arabic",
-    total: "400 000 DA",
-    firstInstallment: "200 000 DA",
-  },
-];
 const MAX_CHOICES = 1;
-const LANGUAGE_MAJORS = ["cs", "scs", "ste", "ebm", "cse"];
+const LANGUAGE_MAJORS = ["cs", "scs", "ste", "ebm", "cse", "fsa"];
 
 interface Major {
   id: string;
@@ -77,7 +27,7 @@ const ChooseMajor = ({ form, majors }: { form: any; majors: Major[] }) => {
   const selectedIds: string[] = form.watch("majors") ?? [];
   const atLimit = selectedIds.length >= MAX_CHOICES;
   const rankOf = (id: string) => selectedIds.indexOf(id) + 1;
-  const ranked = selectedIds.map((id) => MAJORS.find((m) => m.id === id));
+  const ranked = selectedIds.map((id) => majors.find((m) => m.id === id));
   const toggleMajor = (id: string) => {
     const prev: string[] = form.getValues("majors") ?? [];
     let next: string[];
@@ -102,6 +52,33 @@ const ChooseMajor = ({ form, majors }: { form: any; majors: Major[] }) => {
         </p>
       </div>
       <div className="flex flex-col gap-4">
+        {/* Student ID — re-registering students already have one. */}
+        <Controller
+          name="studentId"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field
+              className=" flex flex-col gap-1.5"
+              data-invalid={fieldState.invalid}
+            >
+              <FieldLabel className="text-xs font-medium text-slate-500 gap-0">
+                Student ID
+                <span className="text-red-500 ml-0.5">*</span>
+              </FieldLabel>
+
+              <Input
+                type="text"
+                className="input"
+                {...field}
+                aria-invalid={fieldState.invalid}
+                placeholder="Enter your student ID"
+              />
+
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {majors.map((m) => (
             <MajorCard

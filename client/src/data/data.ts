@@ -227,6 +227,28 @@ export const externMajors = [
   },
 ];
 
+// License re-registration offers one extra specialite that is not open to new
+// registrations, so those paths get their own lists.
+const RE_LIC_EXTRA_INTERN = {
+  id: "fsa",
+  name: "Financial Sciences and Accounting - Accounting",
+  language: "French/Arabic",
+  total: "485 000 DA",
+  firstInstallment: "242 500 DA",
+};
+
+const RE_LIC_EXTRA_EXTERN = {
+  id: "fsa",
+  name: "Financial Sciences and Accounting - Accounting",
+  language: "French/Arabic",
+  total: "585 000 DA",
+  firstInstallment: "292 500 DA",
+};
+
+export const reLicInternMajors = [...internMajors, RE_LIC_EXTRA_INTERN];
+
+export const reLicExternMajors = [...externMajors, RE_LIC_EXTRA_EXTERN];
+
 export const masterMajors = [
   {
     id: "csd",

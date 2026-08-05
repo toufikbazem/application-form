@@ -10,7 +10,7 @@ import ReviewSubmit from "@/steps/ReviewSubmit";
 import SubmitSuccess from "@/steps/SubmitSuccess";
 import ChooseMajor from "@/steps/ReLicMajor";
 import { Spinner } from "@/components/ui/spinner";
-import { externMajors, internMajors } from "@/data/data";
+import { reLicExternMajors, reLicInternMajors } from "@/data/data";
 
 const baseDefaultValues = {
   firstName: "",
@@ -37,6 +37,7 @@ const baseDefaultValues = {
   medicalConditionOther: "",
   majors: [],
   language: "",
+  studentId: "",
 };
 
 const ReLicense = ({
@@ -106,8 +107,8 @@ const ReLicense = ({
           <ChooseMajor
             majors={
               form.getValues("nationality") === "Algerian - جزائري"
-                ? internMajors
-                : externMajors
+                ? reLicInternMajors
+                : reLicExternMajors
             }
             form={form}
           />

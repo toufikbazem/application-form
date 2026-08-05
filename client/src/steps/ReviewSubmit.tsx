@@ -206,8 +206,10 @@ function ReviewSubmit({ form, path }: { form: any; path: FormPath }) {
         </SectionCard>
       )}
 
-      {/* Chosen majors — every path. New paths rank two; re paths pick one. */}
+      {/* Chosen majors — every path. New paths rank two; re paths pick one.
+          The re paths also collect the student ID on this step. */}
       <SectionCard icon={<GraduationCap size={15} />} title="Chosen Majors">
+        {!isNew && <ReviewItem k="Student ID" v={v.studentId} full />}
         {majors.length === 0 ? (
           <div className="text-sm text-slate-500">No majors selected.</div>
         ) : (

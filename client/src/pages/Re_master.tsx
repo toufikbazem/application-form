@@ -36,6 +36,7 @@ const baseDefaultValues = {
   medicalConditionOther: "",
   majors: [],
   language: "",
+  studentId: "",
 };
 
 const ReMaster = ({
