@@ -37,8 +37,9 @@ const LANGUAGE_REQUIRED_MAJORS = ["cs", "scs", "ste", "ebm", "cse"];
 const RE_LIC_LANGUAGE_REQUIRED_MAJORS = [...LANGUAGE_REQUIRED_MAJORS, "fsa"];
 // Major ids that require choosing a language of study (new master).
 const NEW_MAS_LANGUAGE_REQUIRED_MAJORS = ["csd", "csc", "mba"];
-// Major ids that require choosing a language of study (re master).
-const RE_MAS_LANGUAGE_REQUIRED_MAJORS = ["csd", "csc", "mba"];
+// Major ids that require choosing a language of study (re master). Includes
+// "dgm", which is only offered to re-registering students.
+const RE_MAS_LANGUAGE_REQUIRED_MAJORS = ["csd", "csc", "mba", "dgm"];
 
 // Re-registering students already hold a university-issued student ID. Only the
 // re-registration paths collect it, so it lives on their major schemas.

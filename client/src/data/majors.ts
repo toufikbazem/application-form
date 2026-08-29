@@ -1,4 +1,4 @@
-import { masterMajors } from "./data";
+import { masterMajors, reMasMajors } from "./data";
 // Single source of truth for the selectable majors. Note that the same major
 // `id` maps to a different `name` for license vs master, so callers must use
 // the list that matches their path (use `majorsFor(path)`).
@@ -116,9 +116,10 @@ export const LANGUAGE_REQUIRED_MAJORS = ["cs", "scs", "ste"];
 export type FormPath = "newLicense" | "newMaster" | "reLicense" | "reMaster";
 
 export function majorsFor(path: FormPath): Major[] {
-  return path === "newLicense" || path === "reLicense"
-    ? licenseMajors
-    : masterMajors;
+  if (path === "newLicense" || path === "reLicense") return licenseMajors;
+  // Master re-registration offers two specialites that new registrations
+  // don't, so it needs its own list (see `reMasMajors`).
+  return path === "reMaster" ? reMasMajors : masterMajors;
 }
 
 // Resolves a major id to its display name for the given path, falling back to

@@ -288,6 +288,27 @@ export const masterMajors = [
   },
 ];
 
+// Master re-registration offers two extra specialites that are not open to new
+// registrations, so that path gets its own list.
+const RE_MAS_EXTRA = [
+  {
+    id: "dgm",
+    name: "Economic Sciences - Master of Digital Marketing",
+    language: "French/Arabic",
+    total: "445 000 DA",
+    firstInstallment: "225 500 DA",
+  },
+  {
+    id: "mcp",
+    name: "Social Sciences - Master of Clinical Psychology",
+    language: "Arabic",
+    total: "385 000 DA",
+    firstInstallment: "192 000 DA",
+  },
+];
+
+export const reMasMajors = [...masterMajors, ...RE_MAS_EXTRA];
+
 export const universityYear = [
   {
     id: "1",

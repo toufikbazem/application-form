@@ -12,8 +12,9 @@ const ALGERIA_COUNTRY = "Algeria - الجزائر";
 const LANGUAGE_REQUIRED_MAJORS = ["cs", "scs", "ste", "ebm", "cse"];
 // "fsa" is only offered to re-registering license students.
 const RE_LIC_LANGUAGE_REQUIRED_MAJORS = [...LANGUAGE_REQUIRED_MAJORS, "fsa"];
-const NEW_MAS_LANGUAGE_REQUIRED_MAJORS = ["csd", "csc", "esb"];
-const RE_MAS_LANGUAGE_REQUIRED_MAJORS = ["cs", "scs", "ebm"];
+const NEW_MAS_LANGUAGE_REQUIRED_MAJORS = ["csd", "csc", "mba"];
+// "dgm" is only offered to re-registering master students.
+const RE_MAS_LANGUAGE_REQUIRED_MAJORS = ["csd", "csc", "mba", "dgm"];
 // High school name is only required for public/private schools.
 const HIGH_SCHOOL_NAME_REQUIRED_TYPES = ["public - حكومية", "private - خاصة"];
 

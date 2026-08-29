@@ -1,3 +1,7 @@
+// Flat id -> major lookup covering every specialite offered on any path
+// (licence and master, new and re-registration). It is used to resolve a
+// submitted major id to its display name for the spreadsheet, so an id missing
+// here gets logged as the raw id (e.g. "dgm") instead of its name.
 export const externMajors = [
   {
     id: "cs",
@@ -86,6 +90,20 @@ export const externMajors = [
   {
     id: "lbl",
     name: "Law - Business Law",
+    language: "Arabic",
+    total: "385 000 DA",
+    firstInstallment: "192 000 DA",
+  },
+  {
+    id: "dgm",
+    name: "Economic Sciences - Master of Digital Marketing",
+    language: "French/Arabic",
+    total: "445 000 DA",
+    firstInstallment: "225 500 DA",
+  },
+  {
+    id: "mcp",
+    name: "Social Sciences - Master of Clinical Psychology",
     language: "Arabic",
     total: "385 000 DA",
     firstInstallment: "192 000 DA",

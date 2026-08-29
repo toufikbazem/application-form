@@ -8,9 +8,18 @@ import { fileURLToPath } from "url";
 // services/pdf/) so this works regardless of the process working directory.
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SERVER_ROOT = path.resolve(__dirname, "..", "..");
-const FORM_RESIDENT_PATH = path.join(SERVER_ROOT, "formR.pdf");
-const FORM_NON_RESIDENT_PATH = path.join(SERVER_ROOT, "formNR.pdf");
-const FORM_MASTER_PATH = path.join(SERVER_ROOT, "formM.pdf");
+// Each degree has a resident (Algerian) and an international template.
+const LICENCE_RESIDENT_PATH = path.join(SERVER_ROOT, "Licence_Resident.pdf");
+const LICENCE_INTERNATIONAL_PATH = path.join(
+  SERVER_ROOT,
+  "Licence_International.pdf",
+);
+const MASTER_RESIDENT_PATH = path.join(SERVER_ROOT, "Master_Resident.pdf");
+const MASTER_INTERNATIONAL_PATH = path.join(
+  SERVER_ROOT,
+  "Master_International.pdf",
+);
+const ALGERIAN_NATIONALITY = "Algerian - جزائري";
 const ARABIC_FONT_PATH = path.join(SERVER_ROOT, "fonts", "Cairo.ttf");
 
 // Load the blank form template, embed a Unicode (Arabic-capable) font, and
@@ -18,17 +27,17 @@ const ARABIC_FONT_PATH = path.join(SERVER_ROOT, "fonts", "Cairo.ttf");
 // support WinAnsi (Latin-1) and throw on characters like "ج", so we embed
 // Cairo and draw all text with it.
 export const loadFormDocument = async (nationality, degree, type) => {
-  let pdfBytes;
+  const isResident = nationality === ALGERIAN_NATIONALITY;
+  const templatePath =
+    degree === "license"
+      ? isResident
+        ? LICENCE_RESIDENT_PATH
+        : LICENCE_INTERNATIONAL_PATH
+      : isResident
+        ? MASTER_RESIDENT_PATH
+        : MASTER_INTERNATIONAL_PATH;
 
-  if (degree === "license") {
-    if (nationality === "Algerian - جزائري") {
-      pdfBytes = fs.readFileSync(FORM_RESIDENT_PATH);
-    } else {
-      pdfBytes = fs.readFileSync(FORM_NON_RESIDENT_PATH);
-    }
-  } else {
-    pdfBytes = fs.readFileSync(FORM_MASTER_PATH);
-  }
+  const pdfBytes = fs.readFileSync(templatePath);
 
   const pdfDoc = await PDFDocument.load(pdfBytes);
   // fontkit must be registered on the PDFDocument before embedding a

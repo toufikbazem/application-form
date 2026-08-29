@@ -10,17 +10,17 @@ import {
 } from "@/components/ui/select";
 import { Trophy } from "lucide-react";
 import RankPanel from "@/components/RankPanel";
-import { masterMajors } from "@/data/data";
+import { reMasMajors } from "@/data/data";
 import { Input } from "@/components/ui/input";
 
 const MAX_CHOICES = 1;
-const LANGUAGE_MAJORS = ["csd", "csc", "mba"];
+const LANGUAGE_MAJORS = ["csd", "csc", "mba", "dgm"];
 
 const ReMasMajor = ({ form }: { form: any }) => {
   const selectedIds: string[] = form.watch("majors") ?? [];
   const atLimit = selectedIds.length >= MAX_CHOICES;
   const rankOf = (id: string) => selectedIds.indexOf(id) + 1;
-  const ranked = selectedIds.map((id) => masterMajors.find((m) => m.id === id));
+  const ranked = selectedIds.map((id) => reMasMajors.find((m) => m.id === id));
   const toggleMajor = (id: string) => {
     const prev: string[] = form.getValues("majors") ?? [];
     let next: string[];
@@ -73,7 +73,7 @@ const ReMasMajor = ({ form }: { form: any }) => {
         />
 
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {masterMajors.map((m) => (
+          {reMasMajors.map((m) => (
             <MajorCard
               key={m.id}
               major={m}

@@ -8,6 +8,31 @@ const PAD_X = 2;
 export const createDrawers = ({ form, pages, arabicFont, metrics }) => {
   const { ascent, descent, lineHeightPerPt } = metrics;
 
+  // Map every annotation dictionary to the page that lists it. A widget is
+  // supposed to name its page via /P, but not every template writes one (the
+  // Master_* templates omit it entirely), and falling back to page 1 would
+  // silently draw the second page's fields — the specialites and the language
+  // checkboxes — onto the first page at the wrong coordinates. Walking the
+  // pages' /Annots arrays gives the page reliably either way.
+  const pageByAnnot = new Map();
+  for (const page of pages) {
+    const annots = page.node.Annots();
+    if (!annots) continue;
+    for (let i = 0; i < annots.size(); i += 1) {
+      const dict = page.node.context.lookup(annots.get(i));
+      if (dict) pageByAnnot.set(dict, page);
+    }
+  }
+
+  // Resolve the page a widget is drawn on, preferring the /Annots mapping and
+  // falling back to /P (then to the first page) if the widget isn't listed.
+  const pageOf = (widget) => {
+    const byAnnot = pageByAnnot.get(widget.dict);
+    if (byAnnot) return byAnnot;
+    const ref = widget.P();
+    return (ref && pages.find((p) => p.ref === ref)) ?? pages[0];
+  };
+
   // Draw a value directly into a form field's box using page.drawText, which
   // runs fontkit's shaper (so Arabic letters join correctly). The form field
   // itself is removed afterwards (form.flatten) so its empty box doesn't
@@ -25,8 +50,7 @@ export const createDrawers = ({ form, pages, arabicFont, metrics }) => {
     const { x, y, width, height } = widget.getRectangle();
 
     // Find the page this widget lives on.
-    const widgetPageRef = widget.P();
-    const page = pages.find((p) => p.ref === widgetPageRef) ?? pages[0];
+    const page = pageOf(widget);
 
     // Split into directional runs (visual order). Each run is drawn with
     // its own drawText so fontkit shapes it correctly in its own direction.
@@ -75,28 +99,30 @@ export const createDrawers = ({ form, pages, arabicFont, metrics }) => {
     }
   };
 
-  // Tick a checkbox field by name. We don't rely on field.check() +
-  // form.flatten(): this PDF's checkbox "on" appearance draws its tick with
-  // a dingbat font whose BBox is in absolute page coordinates, which
-  // flatten() mis-transforms (the tick lands off-box). Instead we draw an
-  // "X" directly into the widget's rectangle, the same way drawInField
-  // draws text — so it survives flatten() and is always visible.
-  const checkBox = (fieldName) => {
-    let field;
-    try {
-      field = form.getCheckBox(fieldName);
-    } catch {
-      return; // field not present in this PDF
+  // Draw a short mark centered in a field's box, regardless of whether the
+  // field is a checkbox or a text field. The specialite fields are checkboxes
+  // on the master templates but text fields on older ones, so callers that
+  // mark a choice go through this instead of assuming a type.
+  const markField = (fieldName, mark = "X") => {
+    let widget;
+    for (const getter of ["getCheckBox", "getTextField"]) {
+      try {
+        widget = form[getter](fieldName).acroField.getWidgets()[0];
+        break;
+      } catch {
+        // wrong type or not present — try the next getter
+      }
     }
-    const widget = field.acroField.getWidgets()[0];
-    if (!widget) return;
+    if (!widget) return; // field not present in this PDF
     const { x, y, width, height } = widget.getRectangle();
-    const widgetPageRef = widget.P();
-    const page = pages.find((p) => p.ref === widgetPageRef) ?? pages[0];
+    const page = pageOf(widget);
 
-    // Fit an "X" inside the box (with a little padding) and center it.
-    const size = Math.max(6, Math.min(height, width) * 0.9);
-    const mark = "X";
+    // Fit the mark inside the box (with a little padding) and center it.
+    let size = Math.max(6, Math.min(height, width) * 0.9);
+    const maxWidth = width - PAD_X * 2;
+    while (size > 5 && arabicFont.widthOfTextAtSize(mark, size) > maxWidth) {
+      size -= 0.5;
+    }
     const markWidth = arabicFont.widthOfTextAtSize(mark, size);
     const textX = x + (width - markWidth) / 2;
     const textY =
@@ -104,5 +130,13 @@ export const createDrawers = ({ form, pages, arabicFont, metrics }) => {
     page.drawText(mark, { x: textX, y: textY, size, font: arabicFont });
   };
 
-  return { drawInField, checkBox };
+  // Tick a checkbox field by name. We don't rely on field.check() +
+  // form.flatten(): this PDF's checkbox "on" appearance draws its tick with
+  // a dingbat font whose BBox is in absolute page coordinates, which
+  // flatten() mis-transforms (the tick lands off-box). Instead we draw an
+  // "X" directly into the widget's rectangle, the same way drawInField
+  // draws text — so it survives flatten() and is always visible.
+  const checkBox = (fieldName) => markField(fieldName, "X");
+
+  return { drawInField, checkBox, markField };
 };

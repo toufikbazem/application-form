@@ -28,13 +28,18 @@ export const fillAcademicInfo = (data, { drawInField }) => {
     drawInField("bacResult", baccalaureateAverage);
     drawInField("hsType", highSchoolType);
     drawInField("bacSeries", baccalaureateSeries);
+    drawInField("currentUniv", currentUniversity);
   } else {
     drawInField("licenseYear", licenseYear);
     drawInField("licenseMajor", licenseMajor);
     drawInField("licenseUnive", licenseUniversity);
+    // The resident and international master templates spell the current
+    // university field differently ("currentUnive" vs "currentUniversity").
+    // Only one exists in any given template and drawInField skips the other.
+    drawInField("currentUnive", currentUniversity);
+    drawInField("currentUniversity", currentUniversity);
   }
 
-  drawInField("currentUniv", currentUniversity);
   drawInField("currentMajor", currentUniversityMajor);
   drawInField("currentYear", currentUniversityYear);
 };
