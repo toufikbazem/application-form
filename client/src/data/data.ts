@@ -293,7 +293,7 @@ export const masterMajors = [
 const RE_MAS_EXTRA = [
   {
     id: "dgm",
-    name: "Economic Sciences - Master of Digital Marketing",
+    name: "Commercial Sciences - Master of Digital Marketing",
     language: "French/Arabic",
     total: "445 000 DA",
     firstInstallment: "225 500 DA",
